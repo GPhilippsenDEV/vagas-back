@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JwtServiceGenerator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">vagas</a> &gt; <a href="index.source.html" class="el_package">app.config</a> &gt; <span class="el_source">JwtServiceGenerator.java</span></div><h1>JwtServiceGenerator.java</h1><pre class="source lang-java linenums">package app.config;
+
+//JwtService.java
+
+import java.security.Key;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+import app.auth.Usuario;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+
+
+@Service
+<span class="nc" id="L24">public class JwtServiceGenerator {  </span>
+
+	///////////////////////////////////////////////////////
+	//Parâmetros para geração do token
+	public static final String SECRET_KEY = &quot;UMACHAVESECRETADASUAAPIAQUIUMACHAVESECRETADASUAAPIAQUIUMACHAVESECRETADASUAAPIAQUIUMACHAVESECRETADASUAAPIAQUI&quot;;
+<span class="nc" id="L29">	public static final SignatureAlgorithm ALGORITMO_ASSINATURA = SignatureAlgorithm.HS256;</span>
+	public static final int HORAS_EXPIRACAO_TOKEN = 1;
+
+	public Map&lt;String, Object&gt; gerarPayload(Usuario usuario){
+		//AQUI VOCÊ PODE COLOCAR O QUE MAIS VAI COMPOR O PAYLOAD DO TOKEN
+		
+<span class="nc" id="L35">		Map&lt;String, Object&gt; payloadData = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L36">		payloadData.put(&quot;username&quot;, usuario.getUsername());</span>
+<span class="nc" id="L37">		payloadData.put(&quot;id&quot;, usuario.getId().toString());</span>
+<span class="nc" id="L38">		payloadData.put(&quot;role&quot;, usuario.getRole());</span>
+		
+<span class="nc" id="L40">		return payloadData;</span>
+	}
+
+	///////////////////////////////////////////////////////
+
+	
+	
+	
+	
+	public String generateToken(Usuario usuario) {
+
+<span class="nc" id="L51">		Map&lt;String, Object&gt; payloadData = this.gerarPayload(usuario);</span>
+
+<span class="nc" id="L53">		return Jwts</span>
+<span class="nc" id="L54">				.builder()</span>
+<span class="nc" id="L55">				.setClaims(payloadData)</span>
+<span class="nc" id="L56">				.setSubject(usuario.getUsername())</span>
+<span class="nc" id="L57">				.setIssuedAt(new Date(System.currentTimeMillis()))</span>
+<span class="nc" id="L58">				.setExpiration(new Date(new Date().getTime() + 3600000 * this.HORAS_EXPIRACAO_TOKEN))</span>
+<span class="nc" id="L59">				.signWith(getSigningKey(), this.ALGORITMO_ASSINATURA)</span>
+<span class="nc" id="L60">				.compact();</span>
+	}
+
+	private Claims extractAllClaims(String token) {
+<span class="nc" id="L64">		return Jwts</span>
+<span class="nc" id="L65">				.parserBuilder()</span>
+<span class="nc" id="L66">				.setSigningKey(getSigningKey())</span>
+<span class="nc" id="L67">				.build()</span>
+<span class="nc" id="L68">				.parseClaimsJws(token)</span>
+<span class="nc" id="L69">				.getBody();</span>
+	}
+
+
+	public boolean isTokenValid(String token, UserDetails userDetails) {
+<span class="nc" id="L74">		final String username = extractUsername(token);</span>
+<span class="nc bnc" id="L75" title="All 4 branches missed.">		return (username.equals(userDetails.getUsername())) &amp;&amp; !isTokenExpired(token);</span>
+	}
+
+	private boolean isTokenExpired(String token) {
+<span class="nc" id="L79">		return extractExpiration(token).before(new Date());</span>
+	}
+
+	private Date extractExpiration(String token) {
+<span class="nc" id="L83">		return extractClaim(token, Claims::getExpiration);</span>
+	}
+
+	private Key getSigningKey() {
+<span class="nc" id="L87">		byte[] keyBytes = Decoders.BASE64.decode(this.SECRET_KEY);</span>
+<span class="nc" id="L88">		return Keys.hmacShaKeyFor(keyBytes);</span>
+	}
+
+
+	public String extractUsername(String token) {
+<span class="nc" id="L93">		return extractClaim(token,Claims::getSubject);</span>
+	}
+
+	public &lt;T&gt; T extractClaim(String token, Function&lt;Claims, T&gt; claimsResolver) {
+<span class="nc" id="L97">		final Claims claims = extractAllClaims(token);</span>
+<span class="nc" id="L98">		return claimsResolver.apply(claims);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

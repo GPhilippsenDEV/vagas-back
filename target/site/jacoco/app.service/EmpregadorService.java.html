@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmpregadorService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">vagas</a> &gt; <a href="index.source.html" class="el_package">app.service</a> &gt; <span class="el_source">EmpregadorService.java</span></div><h1>EmpregadorService.java</h1><pre class="source lang-java linenums">package app.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import app.entity.Empregador;
+import app.repository.EmpregadorRepository;
+import app.repository.EnderecoRepository;
+
+@Service
+<span class="nc" id="L14">public class EmpregadorService {</span>
+	
+	@Autowired
+	private EmpregadorRepository empregadorRepository;
+	
+	@Autowired 
+	private EnderecoRepository enderecoRepository;
+	
+
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	public String save(Empregador empregador) {
+		
+<span class="nc" id="L28">		List&lt;Empregador&gt; emp = this.empregadorRepository.findByCnpjContaining(empregador.getCnpj());</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">		if(!emp.isEmpty()) {</span>
+<span class="nc" id="L30">			throw new RuntimeException(&quot;Ja existe um empregador cadastrado com o &quot;+emp.get(0).getCnpj());</span>
+		}
+		
+<span class="nc bnc" id="L33" title="All 2 branches missed.">		if(empregador.getEnderecos() != null) {</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">			for(int i=0; i&lt;empregador.getEnderecos().size(); i++) {</span>
+<span class="nc" id="L35">				empregador.getEnderecos().get(i).setEmpregador(empregador);</span>
+			}
+		}
+		
+		//
+<span class="nc" id="L40">		String senhaCrip = this.bCryptPasswordEncoder.encode(empregador.getUsuario().getPassword());</span>
+<span class="nc" id="L41">		empregador.getUsuario().setPassword(senhaCrip);</span>
+		//
+		
+<span class="nc" id="L44">		this.empregadorRepository.save(empregador);</span>
+		
+<span class="nc" id="L46">		return &quot;o Empregador &quot; + empregador.getNomeFantasia() + &quot; de CNPJ: &quot; + empregador.getCnpj() + &quot; foi salvo com sucesso&quot;;</span>
+	}
+	
+	public Empregador findById(long id) {
+		
+<span class="nc" id="L51">		Empregador empregador = this.empregadorRepository.findById(id).get();</span>
+		
+<span class="nc" id="L53">		return empregador;</span>
+	}
+	
+	public String update(Empregador empregador, long id) {
+<span class="nc" id="L57">		empregador.setId(id);</span>
+		
+		
+<span class="nc bnc" id="L60" title="All 2 branches missed.">		if(empregador.getEnderecos() != null) {</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">			for(int i=0; i&lt;empregador.getEnderecos().size(); i++) {</span>
+<span class="nc" id="L62">				empregador.getEnderecos().get(i).setEmpregador(empregador);</span>
+			}
+		}
+		
+		
+<span class="nc" id="L67">		this.empregadorRepository.save(empregador);</span>
+<span class="nc" id="L68">		return empregador.getNomeFantasia() + &quot; foi atualizado com sucesso!&quot;;</span>
+	}
+	
+	public List&lt;Empregador&gt; findAll(){
+		
+<span class="nc" id="L73">		List&lt;Empregador&gt; lista = this.empregadorRepository.findAll();</span>
+
+
+<span class="nc" id="L76">		return lista;</span>
+	}
+	
+	public String delete(long id) {
+<span class="nc" id="L80">		this.empregadorRepository.deleteById(id);</span>
+<span class="nc" id="L81">		return &quot;O Empregador foi deletado&quot;;</span>
+	}
+	
+	 public List&lt;Empregador&gt; findByNomeFantasia(String nomeFantasia) {
+<span class="nc" id="L85">	        return empregadorRepository.findByNomeFantasia(nomeFantasia);</span>
+	    }
+
+	    public List&lt;Empregador&gt; findByNomeFantasiaContaining(String nomeFantasia) {
+<span class="nc" id="L89">	        return empregadorRepository.findByNomeFantasiaContaining(nomeFantasia);</span>
+	    }
+	    
+	    
+	    public List&lt;Empregador&gt; findByCnpjContaining(String cnpj) {
+<span class="nc" id="L94">	        return empregadorRepository.findByCnpjContaining(cnpj);</span>
+	    }
+	    
+	    
+	    
+
+		}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

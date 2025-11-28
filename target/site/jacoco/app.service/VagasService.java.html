@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VagasService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">vagas</a> &gt; <a href="index.source.html" class="el_package">app.service</a> &gt; <span class="el_source">VagasService.java</span></div><h1>VagasService.java</h1><pre class="source lang-java linenums">package app.service;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import app.entity.Empregador;
+import app.entity.Endereco;
+import app.entity.Vagas;
+import app.repository.EmpregadorRepository;
+import app.repository.EnderecoRepository;
+import app.repository.VagasRepository;
+
+@Service
+<span class="nc" id="L17">public class VagasService {</span>
+	
+	@Autowired
+	private VagasRepository vagasRepository;
+	
+	@Autowired 
+	private EnderecoRepository enderecoRepository;
+	@Autowired 
+	private EmpregadorRepository empregadorRepository;
+	
+	public String save(Vagas vagas) {
+	/*	Empregador emp = this.empregadorRepository.findById(vagas.getEmpregador().getId()).get();
+		List&lt;Endereco&gt; enderecos = emp.getEnderecos();
+		
+		for(int i = 0 ; i &lt; enderecos.size(); i++) {
+			if(enderecos.get(i).getCidade() == null)
+				throw new RuntimeException(&quot;Nao e possivel cadastrar uma vaga com o endereco incompleto do empregador&quot;);
+		}
+		
+		*/
+		
+		//arrumar isso aqui
+//		Endereco endereco = this.enderecoRepository.findById(vagas.getEnderecos().getId()).get();
+//		
+//		if(endereco == null) {
+//			throw new RuntimeException(&quot;Nao e possivel cadastrar uma vaga sem endereco&quot;);
+//
+//		}
+//		
+//		if(!endereco.isCadatroCompleto()) {
+//			throw new RuntimeException(&quot;Nao e possivel cadastrar uma vaga com o endereco incompleto&quot;);
+//
+//		}
+<span class="nc" id="L50">		this.vagasRepository.save(vagas);</span>
+		
+<span class="nc" id="L52">		return &quot;a Vaga &quot; + vagas.getDescricao() + &quot; foi salvo com sucesso&quot;;</span>
+	}
+	
+	public Vagas findById(long id) {
+		
+<span class="nc" id="L57">		Vagas vagas = this.vagasRepository.findById(id).get();</span>
+		
+<span class="nc" id="L59">		return vagas;</span>
+	}
+	
+	public String update(Vagas vagas, long id) {
+<span class="nc" id="L63">		vagas.setId(id);</span>
+<span class="nc" id="L64">		this.vagasRepository.save(vagas);</span>
+<span class="nc" id="L65">		return vagas.getDescricao() + &quot; foi atualizado com sucesso!&quot;;</span>
+	}
+	
+	public List&lt;Vagas&gt; findAll(){
+		
+<span class="nc" id="L70">		List&lt;Vagas&gt; lista = this.vagasRepository.findAll();</span>
+
+
+<span class="nc" id="L73">		return lista;</span>
+	}
+	
+	public String delete(long id) {
+<span class="nc" id="L77">		this.vagasRepository.deleteById(id);</span>
+<span class="nc" id="L78">		return &quot;A Vaga foi deletado&quot;;</span>
+	}
+
+	public List&lt;Vagas&gt; findByTituloContainingIgnoreCase(String titulo){
+<span class="nc" id="L82">		return this.vagasRepository.findByTituloContainingIgnoreCase(titulo);</span>
+	}
+	
+	public List&lt;Vagas&gt; findByRequisito(String requisito){
+<span class="nc" id="L86">		return this.vagasRepository.findByRequisito(requisito);</span>
+	}
+	
+	public List&lt;Vagas&gt; findBySalarioBetween(float salario1, float salario2){
+<span class="nc" id="L90">		return this.vagasRepository.findBySalarioBetween(salario1, salario2);</span>
+	}
+	
+	public List&lt;Vagas&gt; findBySetor(String setor){
+<span class="nc" id="L94">		return this.vagasRepository.findBySetor(setor);</span>
+	}
+	
+	public List&lt;Vagas&gt; findByDataAnuncio(LocalDate dataAnuncio){
+<span class="nc" id="L98">		return this.vagasRepository.findByDataAnuncio(dataAnuncio);</span>
+	}
+	
+	public List&lt;Vagas&gt; findByTipo(String tipo){
+<span class="nc" id="L102">		return this.vagasRepository.findByTipo(tipo);</span>
+	}
+	
+	public List&lt;Vagas&gt; findByNivelExperiencia(String nivelExperiencia){
+<span class="nc" id="L106">		return this.vagasRepository.findByNivelExperiencia(nivelExperiencia);</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

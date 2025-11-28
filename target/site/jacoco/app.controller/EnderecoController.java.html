@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EnderecoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">vagas</a> &gt; <a href="index.source.html" class="el_package">app.controller</a> &gt; <span class="el_source">EnderecoController.java</span></div><h1>EnderecoController.java</h1><pre class="source lang-java linenums">package app.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import app.entity.Endereco;
+import app.service.EnderecoService;
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping(&quot;/api/endereco&quot;)
+<span class="nc" id="L15">public class EnderecoController {</span>
+
+    @Autowired
+    private EnderecoService enderecoService;
+
+    @PostMapping(&quot;/save&quot;)
+    public ResponseEntity&lt;String&gt; save(@RequestBody Endereco endereco) {
+<span class="nc" id="L22">        String mensagem = this.enderecoService.save(endereco);</span>
+<span class="nc" id="L23">        return ResponseEntity.ok(mensagem);</span>
+    }
+
+    @DeleteMapping(&quot;/delete/{id}&quot;)
+    public ResponseEntity&lt;String&gt; delete(@PathVariable long id) {
+<span class="nc" id="L28">        String mensagem = this.enderecoService.delete(id);</span>
+<span class="nc" id="L29">        return ResponseEntity.ok(mensagem);</span>
+    }
+
+    @GetMapping(&quot;/findById/{id}&quot;)
+    public ResponseEntity&lt;Endereco&gt; findById(@PathVariable long id) {
+<span class="nc" id="L34">        Endereco endereco = this.enderecoService.findById(id);</span>
+<span class="nc" id="L35">        return ResponseEntity.ok(endereco);</span>
+    }
+
+    @PutMapping(&quot;/update/{id}&quot;)
+    public ResponseEntity&lt;String&gt; update(@Valid @PathVariable long id, @RequestBody Endereco endereco) {
+<span class="nc" id="L40">        String mensagem = this.enderecoService.update(endereco, id);</span>
+<span class="nc" id="L41">        return ResponseEntity.ok(mensagem);</span>
+    }
+
+    @GetMapping(&quot;/findAll&quot;)
+    public ResponseEntity&lt;List&lt;Endereco&gt;&gt; findAll() {
+<span class="nc" id="L46">        List&lt;Endereco&gt; lista = this.enderecoService.findAll();</span>
+<span class="nc" id="L47">        return ResponseEntity.ok(lista);</span>
+    }
+
+    @GetMapping(&quot;/findByCidade&quot;)
+    public ResponseEntity&lt;List&lt;Endereco&gt;&gt; findByCidade(@RequestParam String cidade) {
+<span class="nc" id="L52">        List&lt;Endereco&gt; lista = this.enderecoService.findByCidade(cidade);</span>
+<span class="nc" id="L53">        return ResponseEntity.ok(lista);</span>
+    }
+
+    @GetMapping(&quot;/findByEstado&quot;)
+    public ResponseEntity&lt;List&lt;Endereco&gt;&gt; findByEstado(@RequestParam String estado) {
+<span class="nc" id="L58">        List&lt;Endereco&gt; lista = this.enderecoService.findByEstado(estado);</span>
+<span class="nc" id="L59">        return ResponseEntity.ok(lista);</span>
+    }
+
+    @GetMapping(&quot;/findByCidadeContaining&quot;)
+    public ResponseEntity&lt;List&lt;Endereco&gt;&gt; findByCidadeContaining(@RequestParam String cidade) {
+<span class="nc" id="L64">        List&lt;Endereco&gt; lista = this.enderecoService.findByCidadeContaining(cidade);</span>
+<span class="nc" id="L65">        return ResponseEntity.ok(lista);</span>
+    }
+
+    @GetMapping(&quot;/findByEstadoContaining&quot;)
+    public ResponseEntity&lt;List&lt;Endereco&gt;&gt; findByEstadoContaining(@RequestParam String estado) {
+<span class="nc" id="L70">        List&lt;Endereco&gt; lista = this.enderecoService.findByEstadoContaining(estado);</span>
+<span class="nc" id="L71">        return ResponseEntity.ok(lista);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

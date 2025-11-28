@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmpregadorController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">vagas</a> &gt; <a href="index.source.html" class="el_package">app.controller</a> &gt; <span class="el_source">EmpregadorController.java</span></div><h1>EmpregadorController.java</h1><pre class="source lang-java linenums">package app.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import app.entity.Empregador;
+import app.service.EmpregadorService;
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping(&quot;/api/empregador&quot;)
+@CrossOrigin (&quot;*&quot;)
+@Validated
+<span class="nc" id="L19">public class EmpregadorController {</span>
+
+    @Autowired
+    private EmpregadorService empregadorService;
+
+    @PostMapping(&quot;/save&quot;)
+    public ResponseEntity&lt;String&gt; save(@Valid @RequestBody Empregador empregador) {
+    	
+<span class="nc" id="L27">    	System.out.println(&quot;PASSSOU 1&quot;);</span>
+<span class="nc" id="L28">        String mensagem = this.empregadorService.save(empregador);</span>
+<span class="nc" id="L29">        System.out.println(&quot;PASSSOU 2&quot;);</span>
+<span class="nc" id="L30">        return ResponseEntity.ok(mensagem);</span>
+    }
+    
+    @PreAuthorize(&quot;hasAuthority('Empregador')&quot;)
+    @DeleteMapping(&quot;/delete/{id}&quot;)
+    public ResponseEntity&lt;String&gt; delete(@PathVariable long id) {
+<span class="nc" id="L36">        String mensagem = this.empregadorService.delete(id);</span>
+<span class="nc" id="L37">        return ResponseEntity.ok(mensagem);</span>
+    }
+    
+    @PreAuthorize(&quot;hasAuthority('Empregador')&quot;)
+    @GetMapping(&quot;/findById/{id}&quot;)
+    public ResponseEntity&lt;Empregador&gt; findById(@PathVariable long id) {
+<span class="nc" id="L43">        Empregador empregador = this.empregadorService.findById(id);</span>
+<span class="nc" id="L44">        return ResponseEntity.ok(empregador);</span>
+    }
+
+    @PreAuthorize(&quot;hasAuthority('Empregador')&quot;)
+    @PutMapping(&quot;/update/{id}&quot;)
+    public ResponseEntity&lt;String&gt; update(@Valid @PathVariable long id, @RequestBody Empregador empregador) {
+<span class="nc" id="L50">        String mensagem = this.empregadorService.update(empregador, id);</span>
+<span class="nc" id="L51">        return ResponseEntity.ok(mensagem);</span>
+    }
+
+    @PreAuthorize(&quot;hasAuthority('Empregador')or hasAuthority('Candidato')&quot;)
+    @GetMapping(&quot;/findAll&quot;)
+    public ResponseEntity&lt;List&lt;Empregador&gt;&gt; findAll() {
+<span class="nc" id="L57">        List&lt;Empregador&gt; lista = this.empregadorService.findAll();</span>
+<span class="nc" id="L58">        return ResponseEntity.ok(lista);</span>
+    }
+    
+    @PreAuthorize(&quot;hasAuthority('Empregador')or hasAuthority('Candidato')&quot;)
+    @GetMapping(&quot;/findByNomeFantasia&quot;)
+    public List&lt;Empregador&gt; findByNomeFantansia(@RequestParam String nomeFantasia) {
+<span class="nc" id="L64">        return empregadorService.findByNomeFantasia(nomeFantasia);</span>
+    }
+    @PreAuthorize(&quot;hasAuthority('Empregador')or hasAuthority('Candidato')&quot;)
+    @GetMapping(&quot;/findByNomeFantasiaContaining&quot;)
+    public List&lt;Empregador&gt; findByNomeFantasiaContaining(@RequestParam String nomeFantasia) {
+<span class="nc" id="L69">        return empregadorService.findByNomeFantasiaContaining(nomeFantasia);</span>
+    }
+    
+    @PreAuthorize(&quot;hasAuthority('Empregador')or hasAuthority('Candidato')&quot;)
+    @GetMapping(&quot;/findByCnpjContaining&quot;)
+    public List&lt;Empregador&gt; findByCnpj(@RequestParam String cnpj) {
+<span class="nc" id="L75">        return empregadorService.findByCnpjContaining(cnpj);</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
