@@ -3,7 +3,7 @@
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.entity.Candidato;
-import app.entity.Empregador;
 import app.service.CandidatoService_;
 import jakarta.validation.Valid;
 
@@ -27,63 +26,63 @@ import jakarta.validation.Valid;
 @RequestMapping(&quot;/api/candidato&quot;)
 @CrossOrigin (&quot;*&quot;)
 @Validated
-<span class="nc" id="L30">public class CandidatoController {</span>
+<span class="nc" id="L29">public class CandidatoController {</span>
 	
 	@Autowired
     private CandidatoService_ candidatoService;
 
     @PostMapping(&quot;/save&quot;)
     public ResponseEntity&lt;String&gt; save(@RequestBody Candidato candidato) {
-<span class="nc" id="L37">        String mensagem = this.candidatoService.save(candidato);</span>
-<span class="nc" id="L38">        return ResponseEntity.ok(mensagem);</span>
+<span class="nc" id="L36">        String mensagem = this.candidatoService.save(candidato);</span>
+<span class="nc" id="L37">        return ResponseEntity.ok(mensagem);</span>
     }
 
     @PreAuthorize(&quot;hasAuthority('Candidato')&quot;)
     @DeleteMapping(&quot;/delete/{id}&quot;)
     public ResponseEntity&lt;String&gt; delete(@PathVariable long id) {
-<span class="nc" id="L44">        String mensagem = this.candidatoService.delete(id);</span>
-<span class="nc" id="L45">        return ResponseEntity.ok(mensagem);</span>
+<span class="nc" id="L43">        String mensagem = this.candidatoService.delete(id);</span>
+<span class="nc" id="L44">        return ResponseEntity.ok(mensagem);</span>
     }
     
     @PreAuthorize(&quot;hasAuthority('Candidato')or hasAuthority('Empregador') &quot;)
     @GetMapping(&quot;/findById/{id}&quot;)
     public ResponseEntity&lt;Candidato&gt; findById(@PathVariable long id) {
-<span class="nc" id="L51">        Candidato candidato = this.candidatoService.findById(id);</span>
-<span class="nc" id="L52">        return ResponseEntity.ok(candidato);</span>
+<span class="nc" id="L50">        Candidato candidato = this.candidatoService.findById(id);</span>
+<span class="nc" id="L51">        return ResponseEntity.ok(candidato);</span>
     }
     
     @PreAuthorize(&quot;hasAuthority('Candidato')or hasAuthority('Empregador') &quot;)
     @GetMapping(&quot;/findCandidatoByIdUsuario/{id}&quot;)
     public ResponseEntity&lt;Candidato&gt; findCandidatoByIdUsuario(@PathVariable long id) {
-<span class="nc" id="L58">        Candidato candidato = this.candidatoService.findCandidatoByIdUsuario(id);</span>
-<span class="nc" id="L59">        return ResponseEntity.ok(candidato);</span>
+<span class="nc" id="L57">        Candidato candidato = this.candidatoService.findCandidatoByIdUsuario(id);</span>
+<span class="nc" id="L58">        return ResponseEntity.ok(candidato);</span>
     }
     
     @PreAuthorize(&quot;hasAuthority('Candidato')&quot;)
     @PutMapping(&quot;/update/{id}&quot;)
     public ResponseEntity&lt;String&gt; update(@Valid @PathVariable long id, @RequestBody Candidato candidato) {
-<span class="nc" id="L65">        String mensagem = this.candidatoService.update(candidato, id);</span>
-<span class="nc" id="L66">        return ResponseEntity.ok(mensagem);</span>
+<span class="nc" id="L64">        String mensagem = this.candidatoService.update(candidato, id);</span>
+<span class="nc" id="L65">        return ResponseEntity.ok(mensagem);</span>
     }
 
     @PreAuthorize(&quot;hasAuthority('Empregador')&quot;)
-    @GetMapping(&quot;/findAll&quot;)
-    public ResponseEntity&lt;List&lt;Candidato&gt;&gt; findAll() {
-<span class="nc" id="L72">        List&lt;Candidato&gt; lista = this.candidatoService.findAll();</span>
-<span class="nc" id="L73">        return ResponseEntity.ok(lista);</span>
+    @GetMapping(&quot;/findAll/{numPage}&quot;)
+    public ResponseEntity&lt;Page&lt;Candidato&gt;&gt; findAll(@PathVariable (&quot;numPage&quot;)int numPage) {
+<span class="nc" id="L71">        Page&lt;Candidato&gt; lista = this.candidatoService.findAll(numPage);</span>
+<span class="nc" id="L72">        return ResponseEntity.ok(lista);</span>
     }
 
     @PreAuthorize(&quot;hasAuthority('Candidato')&quot;)
     @PostMapping(&quot;/inscricao&quot;)
     public ResponseEntity&lt;String&gt; inscricao(@RequestParam long idCandidato, @RequestParam long idVaga) {
-<span class="nc" id="L79">        String mensagem = this.candidatoService.inscricao(idCandidato, idVaga);</span>
-<span class="nc" id="L80">        return ResponseEntity.ok(mensagem);</span>
+<span class="nc" id="L78">        String mensagem = this.candidatoService.inscricao(idCandidato, idVaga);</span>
+<span class="nc" id="L79">        return ResponseEntity.ok(mensagem);</span>
     }
     
     @PreAuthorize(&quot;hasAuthority('Empregador')&quot;)
     @GetMapping(&quot;/findByCpfContaining&quot;)
     public List&lt;Candidato&gt; findByCpfContaining(@RequestParam String cpf) {
-<span class="nc" id="L86">        return candidatoService.findByCpfContaining(cpf);</span>
+<span class="nc" id="L85">        return candidatoService.findByCpfContaining(cpf);</span>
     }
 
 }

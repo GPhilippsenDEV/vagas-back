@@ -1,17 +1,12 @@
 package app.config;
 
-import java.util.Arrays;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -19,65 +14,54 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig  {
+public class SecurityConfig {
 
-	///////////////////////////////////////////////////////
+	private final JwtAuthenticationFilter jwtAuthFilter;
+	private final AuthenticationProvider authenticationProvider;
+
+	public SecurityConfig(
+			JwtAuthenticationFilter jwtAuthFilter,
+			AuthenticationProvider authenticationProvider
+	) {
+		this.jwtAuthFilter = jwtAuthFilter;
+		this.authenticationProvider = authenticationProvider;
+	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http    
-		.csrf(AbstractHttpConfigurer::disable)
-		.cors(AbstractHttpConfigurer::disable)
-		.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/api/login").permitAll()
-				.requestMatchers("/api/candidato/save").permitAll()
-				.requestMatchers("/api/empregador/save").permitAll()
-				.requestMatchers("/api/vagas/findAll").permitAll()
-				.requestMatchers("/api/vagas/findByTitulo").permitAll()
-				.requestMatchers("/api/vagas/findByRequisito").permitAll()
-				.requestMatchers("/api/vagas/findBySalario").permitAll()
-				.requestMatchers("/api/vagas/findBySetor").permitAll()
-				.requestMatchers("/api/vagas/findByDataAnuncio").permitAll()
-				.requestMatchers("/api/vagas/findByTipo").permitAll()
-				.requestMatchers("/api/vagas/findByNivelExperiencia").permitAll()
 
-				.anyRequest().authenticated())
-		.authenticationProvider(authenticationProvider)
-		.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-		.sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		http
+				.csrf(csrf -> csrf.disable())
+				.cors(Customizer.withDefaults())
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers("/api/login").permitAll()
+						.requestMatchers("/api/candidato/save").permitAll()
+						.requestMatchers("/api/empregador/save").permitAll()
+						.requestMatchers("/api/vagas/**").permitAll()
+						.anyRequest().authenticated()
+				)
+				.sessionManagement(sess ->
+						sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authenticationProvider(authenticationProvider)
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
 
-	///////////////////////////////////////////////////////
-
-	////commit teste
-
-	@Autowired
-	private JwtAuthenticationFilter jwtAuthFilter;
-
-	@Autowired
-	private AuthenticationProvider authenticationProvider;
-
-
 	@Bean
-	public FilterRegistrationBean<CorsFilter> corsFilter() {
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-		config.setAllowedOriginPatterns(Arrays.asList("*"));
-		config.setAllowedHeaders(Arrays.asList(HttpHeaders.AUTHORIZATION,HttpHeaders.CONTENT_TYPE,HttpHeaders.ACCEPT));
-		config.setAllowedMethods(Arrays.asList(HttpMethod.GET.name(),HttpMethod.POST.name(),HttpMethod.PUT.name(),HttpMethod.DELETE.name()));
-		config.setMaxAge(3600L);
+		config.setAllowedOrigins(List.of("http://localhost:4200"));
+		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		config.setAllowedHeaders(List.of("*"));
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);
-		FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<CorsFilter>(new CorsFilter(source));
-		bean.setOrder(-102);
-		return bean;
+		return source;
 	}
-	
-	
-
-
 }

@@ -1,12 +1,12 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-vagas,app,AppMain,8,0,0,0,3,0,2,0,2,0
+vagas,app,AppMain,17,0,0,0,4,0,3,0,3,0
 vagas,app.service,EmpregadorService,132,0,10,0,26,0,14,0,9,0
 vagas,app.service,EnderecoService,91,0,6,0,23,0,13,0,10,0
-vagas,app.service,CandidatoService_,139,0,12,0,28,0,15,0,9,0
+vagas,app.service,CandidatoService_,146,0,12,0,29,0,15,0,9,0
 vagas,app.service,VagasService,83,0,0,0,19,0,13,0,13,0
 vagas,app.service,ContatoService,62,0,2,0,15,0,7,0,6,0
 vagas,app.controller,VagasController,86,0,0,0,18,0,13,0,13,0
-vagas,app.controller,CandidatoController,65,0,0,0,16,0,9,0,9,0
+vagas,app.controller,CandidatoController,66,0,0,0,16,0,9,0,9,0
 vagas,app.controller,ContatoController,43,0,0,0,11,0,6,0,6,0
 vagas,app.controller,EmpregadorController,64,0,0,0,16,0,9,0,9,0
 vagas,app.controller,EnderecoController,75,0,0,0,19,0,10,0,10,0
@@ -16,6 +16,6 @@ vagas,app.auth,LoginService,35,0,0,0,9,0,3,0,3,0
 vagas,app.auth,Usuario,23,0,0,0,6,0,4,0,4,0
 vagas,app.config,SecurityManager,40,0,0,0,9,0,7,0,7,0
 vagas,app.config,JwtServiceGenerator,134,0,4,0,31,0,13,0,11,0
-vagas,app.config,SecurityConfig,221,0,0,0,32,0,5,0,5,0
-vagas,app.config,JwtAuthenticationFilter,66,0,10,0,17,0,7,0,2,0
+vagas,app.config,SecurityConfig,115,0,0,0,26,0,6,0,6,0
+vagas,app.config,JwtAuthenticationFilter,79,0,12,0,21,0,8,0,2,0
 vagas,app.config,GlobalExceptionHandler,72,0,4,0,13,0,6,0,4,0

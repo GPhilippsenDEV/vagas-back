@@ -3,13 +3,15 @@
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import app.entity.Candidato;
 import app.repository.CandidatoRepository;
 @Service
-<span class="nc" id="L12">public class CandidatoService_ {</span>
+<span class="nc" id="L14">public class CandidatoService_ {</span>
 	
 	@Autowired
 	private CandidatoRepository candidatoRepository;
@@ -19,61 +21,59 @@ import app.repository.CandidatoRepository;
 	
 	public String save(Candidato candidato) {
 		
-<span class="nc" id="L22">		List&lt;Candidato&gt; cand = this.candidatoRepository.findByCpfContaining(candidato.getCpf());</span>
-<span class="nc bnc" id="L23" title="All 4 branches missed.">		if(cand != null &amp;&amp; !cand.isEmpty()) {</span>
-<span class="nc" id="L24">			throw new RuntimeException(&quot;Ja existe um candidato cadastrado com o &quot;+cand.get(0).getCpf());</span>
+<span class="nc" id="L24">		List&lt;Candidato&gt; cand = this.candidatoRepository.findByCpfContaining(candidato.getCpf());</span>
+<span class="nc bnc" id="L25" title="All 4 branches missed.">		if(cand != null &amp;&amp; !cand.isEmpty()) {</span>
+<span class="nc" id="L26">			throw new RuntimeException(&quot;Ja existe um candidato cadastrado com o &quot;+cand.get(0).getCpf());</span>
 		}
 		
-<span class="nc bnc" id="L27" title="All 2 branches missed.">		if(candidato.getEnderecos() != null) {</span>
-<span class="nc bnc" id="L28" title="All 2 branches missed.">			for(int i=0; i&lt;candidato.getEnderecos().size(); i++) {</span>
-<span class="nc" id="L29">				candidato.getEnderecos().get(i).setCandidato(candidato);</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">		if(candidato.getEnderecos() != null) {</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">			for(int i=0; i&lt;candidato.getEnderecos().size(); i++) {</span>
+<span class="nc" id="L31">				candidato.getEnderecos().get(i).setCandidato(candidato);</span>
 			}
 		}
 		
 		//
-<span class="nc" id="L34">		String senhaCrip = this.bCryptPasswordEncoder.encode(candidato.getUsuario().getPassword());</span>
-<span class="nc" id="L35">		candidato.getUsuario().setPassword(senhaCrip);</span>
+<span class="nc" id="L36">		String senhaCrip = this.bCryptPasswordEncoder.encode(candidato.getUsuario().getPassword());</span>
+<span class="nc" id="L37">		candidato.getUsuario().setPassword(senhaCrip);</span>
 		//
 		
-<span class="nc" id="L38">		this.candidatoRepository.save(candidato);</span>
+<span class="nc" id="L40">		this.candidatoRepository.save(candidato);</span>
 		
-<span class="nc" id="L40">		return &quot;o Candidato &quot; + candidato.getNome() + &quot; foi salvo com sucesso&quot;;</span>
+<span class="nc" id="L42">		return &quot;o Candidato &quot; + candidato.getNome() + &quot; foi salvo com sucesso&quot;;</span>
 	}
 	
 	public Candidato findById(long id) {
 		
-<span class="nc" id="L45">		Candidato candidato = this.candidatoRepository.findById(id).get();</span>
+<span class="nc" id="L47">		Candidato candidato = this.candidatoRepository.findById(id).get();</span>
 		
-<span class="nc" id="L47">		return candidato;</span>
+<span class="nc" id="L49">		return candidato;</span>
 	}
 	
 public Candidato findCandidatoByIdUsuario(long id) {
 		
-<span class="nc" id="L52">		Candidato candidato = this.candidatoRepository.findCandidatoByIdUsuario(id).get();</span>
+<span class="nc" id="L54">		Candidato candidato = this.candidatoRepository.findCandidatoByIdUsuario(id).get();</span>
 		
-<span class="nc" id="L54">		return candidato;</span>
+<span class="nc" id="L56">		return candidato;</span>
 	}
 	
 	public String update(Candidato candidato, long id) {
-<span class="nc" id="L58">		candidato.setId(id);</span>
+<span class="nc" id="L60">		candidato.setId(id);</span>
 		
-<span class="nc bnc" id="L60" title="All 2 branches missed.">		if(candidato.getEnderecos() != null) {</span>
-<span class="nc bnc" id="L61" title="All 2 branches missed.">			for(int i=0; i&lt;candidato.getEnderecos().size(); i++) {</span>
-<span class="nc" id="L62">				candidato.getEnderecos().get(i).setCandidato(candidato);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		if(candidato.getEnderecos() != null) {</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">			for(int i=0; i&lt;candidato.getEnderecos().size(); i++) {</span>
+<span class="nc" id="L64">				candidato.getEnderecos().get(i).setCandidato(candidato);</span>
 			}
 		}
 		
 		
-<span class="nc" id="L67">		this.candidatoRepository.save(candidato);</span>
-<span class="nc" id="L68">		return candidato.getNome() + &quot; foi atualizado com sucesso!&quot;;</span>
+<span class="nc" id="L69">		this.candidatoRepository.save(candidato);</span>
+<span class="nc" id="L70">		return candidato.getNome() + &quot; foi atualizado com sucesso!&quot;;</span>
 	}
 	
-	public List&lt;Candidato&gt; findAll(){
-		
-<span class="nc" id="L73">		List&lt;Candidato&gt; lista = this.candidatoRepository.findAll();</span>
-
-
-<span class="nc" id="L76">		return lista;</span>
+	public Page&lt;Candidato&gt; findAll(int numPage){
+<span class="nc" id="L74">		int totalPorPagina = 5;</span>
+<span class="nc" id="L75">		PageRequest pageRequest = PageRequest.of(numPage-1, totalPorPagina);</span>
+<span class="nc" id="L76">		return this.candidatoRepository.findAll(pageRequest);</span>
 	}
 	
 	public String delete(long id) {
